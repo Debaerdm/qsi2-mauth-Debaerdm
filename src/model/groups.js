@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
     'Groups',
     {
       id: {
-        // Avoid usage of auto-increment numbers, UUID is a better choice
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         comment: 'Group ID',
@@ -25,6 +24,20 @@ module.exports = (sequelize, DataTypes) => {
           this.setDataValue('description', val.charAt(0).toUpperCase() + val.substring(1).toLowerCase());
         }
       },
+      metadata: {
+        type: DataTypes.JSON,
+        comment: 'Group metadata'
+      },
+    },
+    {
+      // logical delete over physical delete
+      paranoid: true,
+      indexes: [
+        {
+          unique: true,
+          fields: ['title']
+        }
+      ]
     }
   );
 
