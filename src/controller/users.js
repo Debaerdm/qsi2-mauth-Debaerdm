@@ -16,15 +16,6 @@ const createUser = ({ firstName, lastName, email, password }) =>
     )
   );
 
-const updateUser = ({ id, firstname, lastname }) => {
-  Users.update(
-    { firstName: firstname || '',
-    lastName: lastname || '' },
-    {where: {id} }
-  )
-  .then(value => value[0] > 0 ? Promise.resolve() : Promise.reject(new Error('UNKOWN USER')))
-};
-
 const loginUser = ({ email, password }) =>
   Users.findOne({
     where: {
@@ -58,6 +49,17 @@ const getUser = ({ id }) =>
           Users.excludeAttributes
         )
       : Promise.reject(new Error('UNKOWN OR DELETED USER'))
+  );
+
+
+const updateUser = ({ id, firstname, lastname }) => 
+  Users.update(
+    { firstName: firstname || '', lastName: lastname || ''},
+    { where: {id} }
+  ).then(user =>
+    omit(
+      user
+    )
   );
 
 module.exports = {

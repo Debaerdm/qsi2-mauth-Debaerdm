@@ -95,9 +95,7 @@ apiUsersProtected.get('/', (req, res) =>
   })
 );
 
-apiUsersProtected.put('/', (req, res) => {
-  console.log(req.body);
-  return !req.body.id && !req.body.firstname && !req.body.lastname
+apiUsersProtected.put('/', (req, res) => !req.body.id && !req.body.firstname && !req.body.lastname
     ? res.status(400).send({
       success: false,
       message: 'Identifier, firstname and lastname is required'
@@ -114,7 +112,6 @@ apiUsersProtected.put('/', (req, res) => {
           success: false,
           message: `${err.name} : ${err.message}`
         });
-      })
-    });
+      }));
 
 module.exports = { apiUsers, apiUsersProtected };
