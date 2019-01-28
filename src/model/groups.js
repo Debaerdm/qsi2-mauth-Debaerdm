@@ -1,3 +1,7 @@
+const path = require('path');
+
+const { Users } = require(path.resolve( __dirname, "./users.js" ));
+
 module.exports = (sequelize, DataTypes) => {
   const Groups = sequelize.define(
     'Groups',
@@ -38,8 +42,18 @@ module.exports = (sequelize, DataTypes) => {
           fields: ['title']
         }
       ]
-    }
-  );
+    }, 
+    {
+      classMethods: {
+        associate: models => {
+          Groups.belongsTo(models.Users, {foreignKey: 'fk_owner', sourceKey: 'id'});
+          Groups.hasMany(models.Users, {foreignKey: 'fk_groupsContains', sourceKey: 'id'});
+        }
+      },
+      tableName: 'Groups'
+    });
+
+  
 
   return Groups;
 };

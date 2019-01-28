@@ -1,4 +1,8 @@
 const bcrypt = require('bcrypt'); // https://github.com/kelektiv/node.bcrypt.js
+const path = require('path');
+
+const { Groups } = require(path.resolve( __dirname, "./groups.js" ));
+
 
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define(
@@ -63,8 +67,15 @@ module.exports = (sequelize, DataTypes) => {
           fields: ['email']
         }
       ]
-    }
-  );
+    },
+    {
+      classMethods: {
+        associate: models => {
+          Users.hasMany(models.Groups, {foreignKey: 'fk_groupsJoined', sourceKey: 'id'});
+        }
+      },
+      tableName: 'Users'
+    });
 
   // we don't want to send password even if crypted
   Users.excludeAttributes = ['hash'];
@@ -81,6 +92,8 @@ module.exports = (sequelize, DataTypes) => {
       });
     });
   };
+
+  
 
   return Users;
 };
