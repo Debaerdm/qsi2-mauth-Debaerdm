@@ -1,5 +1,5 @@
 const omit = require('lodash.omit');
-const { Users } = require('../model');
+const { Users, Groups } = require('../model');
 
 const createUser = ({ firstName, lastName, email, password }) =>
   Users.create({
@@ -69,6 +69,7 @@ Users.destroy(
 ).then(value =>  {
   omit(value[0].dataValues);
 });
+
 
 module.exports = {
   createUser,

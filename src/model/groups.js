@@ -1,7 +1,3 @@
-const path = require('path');
-
-const { Users } = require(path.resolve( __dirname, "./users.js" ));
-
 module.exports = (sequelize, DataTypes) => {
   const Groups = sequelize.define(
     'Groups',
@@ -31,29 +27,13 @@ module.exports = (sequelize, DataTypes) => {
       metadata: {
         type: DataTypes.JSON,
         comment: 'Group metadata'
-      },
-    },
-    {
-      // logical delete over physical delete
-      paranoid: true,
-      indexes: [
-        {
-          unique: true,
-          fields: ['title']
-        }
-      ]
-    }, 
-    {
-      classMethods: {
-        associate: models => {
-          Groups.belongsTo(models.Users, {foreignKey: 'fk_owner', sourceKey: 'id'});
-          Groups.hasMany(models.Users, {foreignKey: 'fk_groupsContains', sourceKey: 'id'});
-        }
-      },
-      tableName: 'Groups'
+      }
     });
 
-  
+  Groups.associate = models => {
+    Groups.belongsToMany(models.Users, {through: 'UsersGroups'});
+    Groups.belongsTo(models.Users, {as: 'owner', foreignKey: 'ownerId'});
+  };
 
   return Groups;
 };
