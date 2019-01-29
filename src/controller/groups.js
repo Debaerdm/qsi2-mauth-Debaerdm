@@ -1,6 +1,4 @@
-import { col } from "sequelize";
-
-const { Groups, Users } = require('../model');
+const { Groups } = require('../model');
 
 const createGroup = ({title, description, metadata}, {id}) =>
   Groups.create({
@@ -11,13 +9,6 @@ const createGroup = ({title, description, metadata}, {id}) =>
   });
 
 const findAllGroups = () => Groups.findAll();
-
-const getAllRecentPosts = ({id}) => Groups.findAll({
-  include: [{
-    model: Users,
-    where: { userId: col('user.id') }
-  }]
-}).then(group => console.log(group));
 
 const addUserToGroup = ({groupId, userId}) =>
   Groups.findOne({
@@ -35,4 +26,4 @@ const removeUserFromGroup = ({ groupId, userId }) =>
       : Promise.reject(new Error('Group not found'))
   );
 
-module.exports = { createGroup, findAllGroups, addUserToGroup, removeUserFromGroup, getAllRecentPosts };
+module.exports = { createGroup, findAllGroups, addUserToGroup, removeUserFromGroup };

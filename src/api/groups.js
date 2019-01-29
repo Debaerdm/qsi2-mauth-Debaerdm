@@ -1,5 +1,5 @@
 const express = require('express');
-const { createGroup, findAllGroups, addUserToGroup, removeUserFromGroup, getAllRecentPosts } = require('../controller/groups');
+const { createGroup, findAllGroups, addUserToGroup, removeUserFromGroup } = require('../controller/groups');
 const logger = require('../logger');
 
 const apiGroups = express.Router();
@@ -77,20 +77,6 @@ apiGroups.get('/', (req, res) =>
     message: 'The list of groups'
   })).catch(err => {
     logger.error(`💥 Failed to get list of groups : ${err.stack}`);
-    return res.status(500).send({
-      success: false,
-      message: `${err.name} : ${err.message}`
-    });
-  })
-);
-
-apiGroups.get('/posts', (req, res) =>
-  getAllRecentPosts(req.user).then(groups => res.status(200).send({
-    success: true,
-    profile: groups,
-    message: 'The list of posts'
-  })).catch(err => {
-    logger.error(`💥 Failed to get list of posts : ${err.stack}`);
     return res.status(500).send({
       success: false,
       message: `${err.name} : ${err.message}`
